@@ -58,6 +58,7 @@
     "@adonisjs/session": "^7.5.1",
     "@vinejs/vine": "^3.0.0",
     "better-sqlite3": "^11.9.1",
+    "faker": "^6.6.6",
     "luxon": "^3.6.1",
     "reflect-metadata": "^0.2.2"
   },
