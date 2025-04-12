@@ -10,6 +10,7 @@ export default class AuthController {
   public async register({ request, auth, response }: HttpContext) {
     const payload = await request.validateUsing(createUserValidator)
     const user = await User.create(payload)
+    // @ts-ignore
     await auth.use('web').login(user)
     return response.created(user)
   }
@@ -18,6 +19,7 @@ export default class AuthController {
     try {
       const { email, password } = request.all()
       const user = await User.verifyCredentials(email, password)
+      // @ts-ignore
       await auth.use('web').login(user)
       return response.ok(user)
     } catch {
@@ -26,6 +28,7 @@ export default class AuthController {
   }
 
   public async logout({ auth, response }: HttpContext) {
+    // @ts-ignore
     await auth.use('web').logout()
     return response.ok('Logged out successfully')
   }

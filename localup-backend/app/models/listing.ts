@@ -20,13 +20,13 @@ export default class Listing extends BaseModel {
   declare category: string
 
   @column()
-  declare location: string
+  declare location: string | null
 
   @column()
   declare imageUrl: string | null
 
   @column()
-  declare userId: string
+  declare userId: number
 
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>
