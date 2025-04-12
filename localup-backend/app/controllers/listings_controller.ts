@@ -3,21 +3,18 @@ import Listing from '#models/listing'
 import { listingValidator } from '#validators/listing'
 
 export default class ListingsController {
-  public async index({}: HttpContext) {
-    return Listing.query().preload('user').orderBy('updatedAt', 'desc')
+  public async index({ request }: HttpContext) {
+    const page = request.input('page', 1)
+    const limit = 5
+    return Listing.query().preload('user').orderBy('updatedAt', 'desc').paginate(page, limit)
   }
 
   public async show({ params }: HttpContext) {
-    const listing = await Listing.query().where('id', params.id).preload('user').firstOrFail()
-    return listing
+    return await Listing.query().where('id', params.id).preload('user').firstOrFail()
   }
 
   public async userListings({ params }: HttpContext) {
-    const listings = await Listing.query()
-      .where('userId', params.id)
-      .preload('user')
-      .orderBy('updatedAt', 'desc')
-    return listings
+    return Listing.query().where('userId', params.id).preload('user').orderBy('updatedAt', 'desc')
   }
 
   public async store({ request, auth, response }: HttpContext) {
