@@ -1,12 +1,29 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Listing from '#models/listing'
 import { listingValidator } from '#validators/listing'
+import { ListingCategory } from '../enums/listings_category.js'
 
 export default class ListingsController {
   public async index({ request }: HttpContext) {
     const page = request.input('page', 1)
-    const limit = 5
-    return Listing.query().preload('user').orderBy('updatedAt', 'desc').paginate(page, limit)
+    const limit = request.input('limit', 10)
+    const category = request.input('category')
+    const search = request.input('search')
+
+    const query = Listing.query().preload('user').orderBy('updatedAt', 'desc')
+    if (category && !Object.values(ListingCategory).includes(category as ListingCategory)) {
+      return { message: 'Category is not valid.' }
+    }
+
+    if (category) {
+      query.where('category', category)
+    }
+    if (search) {
+      query.where((subQuery) => {
+        subQuery.whereLike('title', `%${search}%`).orWhereLike('description', `%${search}%`)
+      })
+    }
+    return query.paginate(page, limit)
   }
 
   public async show({ params }: HttpContext) {
