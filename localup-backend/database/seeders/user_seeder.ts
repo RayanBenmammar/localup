@@ -46,6 +46,8 @@ export default class extends BaseSeeder {
             title = `Peluche ${fakerFR.animal.type()}`
             description = `${title}, propre et en bon état. Maison non-fumeur.`
             break
+          case ListingCategory.SPORTS:
+          case ListingCategory.OTHER:
           default:
             title = 'Objet divers'
             description = 'Description non disponible.'

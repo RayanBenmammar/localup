@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { useMutation } from '@tanstack/react-query';
 import { registerUser } from '@/features/auth/api.ts';
+import { useNavigate } from 'react-router-dom';
 
 export function RegisterForm() {
   const form = useForm<RegisterFormData>({
@@ -25,10 +26,12 @@ export function RegisterForm() {
     },
   });
 
+  const navigate = useNavigate();
+
   const mutation = useMutation({
     mutationFn: registerUser,
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
+      navigate('/');
     },
     onError: (error) => {
       console.error(error);

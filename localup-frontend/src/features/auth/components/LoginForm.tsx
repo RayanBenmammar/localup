@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/input.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { useMutation } from '@tanstack/react-query';
 import { loginUser } from '@/features/auth/api.ts';
+import { useNavigate } from 'react-router-dom';
 
 export function LoginForm() {
   const form = useForm<LoginFormData>({
@@ -25,10 +26,12 @@ export function LoginForm() {
     },
   });
 
+  const navigate = useNavigate();
+
   const mutation = useMutation({
     mutationFn: loginUser,
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
+      navigate('/');
     },
     onError: (error) => {
       console.error(error);
