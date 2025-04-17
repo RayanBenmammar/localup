@@ -22,6 +22,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card.tsx';
+import { Link } from 'react-router-dom';
 
 export function RegisterForm({
   className,
@@ -129,9 +130,18 @@ export function RegisterForm({
                 )}
               />
 
-              <Button type="submit" disabled={mutation.isPending}>
-                {mutation.isPending ? 'Inscription...' : "S'inscrire"}
-              </Button>
+              <div className="flex flex-col gap-4">
+                <Button type="submit" disabled={mutation.isPending}>
+                  {mutation.isPending ? 'Inscription...' : "S'inscrire"}
+                </Button>
+
+                <p className="text-sm text-center text-gray-600">
+                  Déjà un compte ?{' '}
+                  <Link to="/login" className="text-blue-600 hover:underline">
+                    Se connecter
+                  </Link>
+                </p>
+              </div>
             </form>
           </Form>
         </CardContent>

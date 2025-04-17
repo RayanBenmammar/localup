@@ -4,26 +4,47 @@ import { LoginPage } from '@/pages/login.tsx';
 import { RegisterPage } from '@/pages/register.tsx';
 import { ListingDetailsPage } from '@/pages/listing-details.tsx';
 import { CreateListingPage } from '@/pages/createListingPage.tsx';
+import { Layout } from '@/layouts/layout.tsx';
 
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <HomePage />,
+    element: (
+      <Layout>
+        <HomePage />
+      </Layout>
+    ),
   },
   {
     path: '/login',
-    element: <LoginPage />,
+    element: (
+      <Layout>
+        <LoginPage />
+      </Layout>
+    ),
   },
   {
     path: '/register',
-    element: <RegisterPage />,
+    element: (
+      <Layout>
+        <RegisterPage />
+      </Layout>
+    ),
   },
   {
     path: '/listing/:id',
-    element: <ListingDetailsPage />,
+    element: (
+      <Layout>
+        <ListingDetailsPage />
+      </Layout>
+    ),
   },
   {
     path: '/listing/new',
-    element: <CreateListingPage />,
+    element: (
+      <Layout>
+        <CreateListingPage />
+      </Layout>
+    ),
   },
 ]);

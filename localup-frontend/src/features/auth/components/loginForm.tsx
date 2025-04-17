@@ -1,5 +1,3 @@
-'use client';
-
 import { LoginFormData, loginSchema } from '@/features/auth/schema.ts';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,7 +13,7 @@ import { Input } from '@/components/ui/input.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { useMutation } from '@tanstack/react-query';
 import { loginUser } from '@/features/auth/api.ts';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import {
   Card,
@@ -97,9 +95,21 @@ export function LoginForm({
                 )}
               />
 
-              <Button type="submit" disabled={mutation.isPending}>
-                {mutation.isPending ? 'Connexion...' : 'Se connecter'}
-              </Button>
+              <div className="flex flex-col gap-4">
+                <Button type="submit" disabled={mutation.isPending}>
+                  {mutation.isPending ? 'Connexion...' : 'Se connecter'}
+                </Button>
+
+                <p className="text-sm text-center text-gray-600">
+                  Pas encore de compte ?{' '}
+                  <Link
+                    to="/register"
+                    className="text-blue-600 hover:underline"
+                  >
+                    S'inscrire
+                  </Link>
+                </p>
+              </div>
             </form>
           </Form>
         </CardContent>

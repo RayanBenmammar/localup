@@ -41,7 +41,6 @@ export function ListingForm({
       title: '',
       description: '',
       price: 0,
-      category: ListingCategory.OTHER,
     },
   });
 
