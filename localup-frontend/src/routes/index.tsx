@@ -3,6 +3,7 @@ import HomePage from '@/pages/home.tsx';
 import { LoginPage } from '@/pages/login.tsx';
 import { RegisterPage } from '@/pages/register.tsx';
 import { ListingDetailsPage } from '@/pages/listing-details.tsx';
+import { CreateListingPage } from '@/pages/createListingPage.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -20,5 +21,9 @@ export const router = createBrowserRouter([
   {
     path: '/listing/:id',
     element: <ListingDetailsPage />,
+  },
+  {
+    path: '/listing/new',
+    element: <CreateListingPage />,
   },
 ]);
