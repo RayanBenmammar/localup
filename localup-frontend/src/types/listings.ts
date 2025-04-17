@@ -1,4 +1,4 @@
-import { ListingCategory } from '@/types/listing-category';
+import { ListingCategory } from '@/types/listingCategory.ts';
 
 export interface User {
   id: number;

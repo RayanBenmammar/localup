@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ListingCategory } from '@/types/listing-category.ts';
+import { ListingCategory } from '@/types/listingCategory.ts';
 
 export const listingSchema = z.object({
   title: z

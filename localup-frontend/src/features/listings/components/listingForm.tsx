@@ -29,7 +29,7 @@ import {
 } from '@/components/ui/select.tsx';
 import { useMutation } from '@tanstack/react-query';
 import { createListing } from '@/features/listings/api.ts';
-import { ListingCategory } from '@/types/listing-category.ts';
+import { ListingCategory } from '@/types/listingCategory.ts';
 
 export function ListingForm({
   className,

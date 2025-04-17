@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/form.tsx';
 import { Input } from '@/components/ui/input.tsx';
 import { Button } from '@/components/ui/button.tsx';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { loginUser } from '@/features/auth/api.ts';
 import { Link, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -34,12 +34,13 @@ export function LoginForm({
       password: '',
     },
   });
-
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const mutation = useMutation({
     mutationFn: loginUser,
-    onSuccess: () => {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['me'] });
       navigate('/');
     },
     onError: (error) => {
