@@ -35,20 +35,22 @@ export function ListingDetailsPage() {
 
   if (error) return <div>L'annonce n'est plus disponible</div>;
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{data?.title}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p>{data?.description}</p>
-        {displayEditButton() && (
-          <div className="mt-4">
-            <Button onClick={() => navigate(`/listing/edit/${id}`)}>
-              Modifier
-            </Button>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+    <div className="p-4 space-y-4">
+      <Card>
+        <CardHeader>
+          <CardTitle>{data?.title}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p>{data?.description}</p>
+          {displayEditButton() && (
+            <div className="mt-4">
+              <Button onClick={() => navigate(`/listing/edit/${id}`)}>
+                Modifier
+              </Button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   );
 }

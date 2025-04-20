@@ -7,8 +7,17 @@ export const api = axios.create({
   withCredentials: true,
 });
 
-export async function getListings({ page = 1, limit = 10 }) {
-  const response = await api.get(`/listings?page=${page}&limit=${limit}`);
+export async function getListings({
+  page = 1,
+  search,
+}: {
+  page: number;
+  search?: string;
+}) {
+  const params = new URLSearchParams();
+  params.set('page', String(page));
+  if (search) params.set('search', search);
+  const response = await api.get(`/listings?${params.toString()}`);
   return response.data;
 }
 
