@@ -12,6 +12,7 @@ export const listingSchema = z.object({
     .number()
     .positive({ message: 'Le prix doit être un nombre positif' }),
   category: z.nativeEnum(ListingCategory),
+  id: z.number().optional(),
 });
 
 export type listingFormData = z.infer<typeof listingSchema>;

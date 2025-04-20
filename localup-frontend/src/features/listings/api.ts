@@ -5,8 +5,19 @@ export async function createListing(data: {
   description: string;
   price: number;
   category: string;
+  id?: number;
 }) {
   const response = await api.post('/listings', data);
-  console.log('createListing response', response);
+  return response.data;
+}
+
+export async function editListing(data: {
+  title: string;
+  description: string;
+  price: number;
+  category: string;
+  id?: number;
+}) {
+  const response = await api.put(`/listings/${data.id}`, data);
   return response.data;
 }

@@ -1,11 +1,12 @@
-import { createBrowserRouter } from 'react-router-dom';
-import HomePage from '@/pages/home.tsx';
-import { LoginPage } from '@/pages/login.tsx';
-import { RegisterPage } from '@/pages/register.tsx';
-import { ListingDetailsPage } from '@/pages/listingDetails.tsx';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
+import HomePage from '@/pages/homePage.tsx';
+import { LoginPage } from '@/pages/loginPage.tsx';
+import { RegisterPage } from '@/pages/registerPage.tsx';
+import { ListingDetailsPage } from '@/pages/listingDetailsPage.tsx';
 import { CreateListingPage } from '@/pages/createListingPage.tsx';
 import { Layout } from '@/layouts/layout.tsx';
 import { AuthGuard } from '@/guards/authGuard.tsx';
+import { EditListingPage } from '@/pages/editListingPage.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +34,14 @@ export const router = createBrowserRouter([
     ),
   },
   {
+    path: '/listing/',
+    element: <Navigate to="/" replace />,
+  },
+  {
+    path: '/listing/edit/',
+    element: <Navigate to="/" replace />,
+  },
+  {
     path: '/listing/:id',
     element: (
       <Layout>
@@ -45,6 +54,15 @@ export const router = createBrowserRouter([
     element: (
       <Layout>
         <CreateListingPage />
+      </Layout>
+    ),
+    loader: AuthGuard,
+  },
+  {
+    path: '/listing/edit/:id',
+    element: (
+      <Layout>
+        <EditListingPage />
       </Layout>
     ),
     loader: AuthGuard,

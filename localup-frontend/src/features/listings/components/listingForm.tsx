@@ -28,26 +28,30 @@ import {
   SelectValue,
 } from '@/components/ui/select.tsx';
 import { useMutation } from '@tanstack/react-query';
-import { createListing } from '@/features/listings/api.ts';
+import { createListing, editListing } from '@/features/listings/api.ts';
 import { ListingCategory } from '@/types/listingCategory.ts';
+import { Listing } from '@/types/listings.ts';
 
-export function ListingForm({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<'div'>) {
+interface ListingFormProps extends React.ComponentPropsWithoutRef<'div'> {
+  data?: Listing;
+}
+
+export function ListingForm({ className, data, ...props }: ListingFormProps) {
   const form = useForm<listingFormData>({
     resolver: zodResolver(listingSchema),
     defaultValues: {
-      title: '',
-      description: '',
-      price: 0,
+      title: data?.title ?? '',
+      description: data?.description ?? '',
+      price: data?.price ?? 0,
+      category: data?.category ?? undefined,
     },
   });
 
+  const isEdit = Boolean(data);
   const navigate = useNavigate();
 
   const mutation = useMutation({
-    mutationFn: createListing,
+    mutationFn: isEdit ? editListing : createListing,
     onSuccess: (data) => {
       try {
         const jsonStart = data.indexOf('{');
@@ -64,17 +68,39 @@ export function ListingForm({
     },
   });
 
-  const onSubmit = (data: listingFormData) => {
-    mutation.mutate(data);
+  const onSubmit = (listingData: listingFormData) => {
+    if (isEdit) {
+      listingData.id = data!.id;
+    }
+    mutation.mutate(listingData);
+  };
+
+  const submitButtonComponent = (isPending: boolean) => {
+    if (!isEdit)
+      return (
+        <Button type="submit" disabled={isPending}>
+          {isPending ? 'Ajout en cours...' : 'Ajouter'}
+        </Button>
+      );
+
+    return (
+      <Button type="submit" disabled={isPending}>
+        {isPending ? 'Modification en cours...' : 'Modifier'}{' '}
+      </Button>
+    );
   };
 
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">Nouvelle Annonce</CardTitle>
+          <CardTitle className="text-2xl">
+            {isEdit ? "Editer l'annonce " : 'Nouvelle Annonce'}
+          </CardTitle>
           <CardDescription>
-            Entrer les informations concernant votre nouvelle annonce
+            {isEdit
+              ? 'Entrer les informations concernant votre annonce '
+              : 'Entrer les informations concernant votre nouvelle annonce'}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -93,7 +119,6 @@ export function ListingForm({
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="description"
@@ -107,7 +132,6 @@ export function ListingForm({
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="price"
@@ -127,7 +151,6 @@ export function ListingForm({
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="category"
@@ -157,9 +180,17 @@ export function ListingForm({
                   </>
                 )}
               />
-              <Button type="submit" disabled={mutation.isPending}>
-                {mutation.isPending ? 'Ajout en cours...' : 'Ajouter'}
-              </Button>
+              <div className={cn('flex justify-center gap-6', className)}>
+                <Button
+                  type="button"
+                  onClick={() =>
+                    navigate(isEdit ? `/listing/${data!.id}` : '/')
+                  }
+                >
+                  Annuler
+                </Button>
+                {submitButtonComponent(mutation.isPending)}
+              </div>
             </form>
           </Form>
         </CardContent>
