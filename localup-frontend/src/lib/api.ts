@@ -7,9 +7,9 @@ export const api = axios.create({
   withCredentials: true,
 });
 
-export async function getListings(): Promise<Listing[]> {
-  const response = await api.get('/listings');
-  return response.data.data;
+export async function getListings({ page = 1, limit = 10 }) {
+  const response = await api.get(`/listings?page=${page}&limit=${limit}`);
+  return response.data;
 }
 
 const fetchListing = async (id: string) => {

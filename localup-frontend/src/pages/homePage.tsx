@@ -2,15 +2,18 @@ import { getListings } from '@/lib/api.ts';
 import { useQuery } from '@tanstack/react-query';
 import { Listing } from '@/types/listings.ts';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { PaginationControls } from '@/components/ui/paginationControls';
 
 export default function HomePage() {
+  const [page, setPage] = useState(1);
   const {
     data: listings,
     isLoading,
     isError,
-  } = useQuery<Listing[]>({
-    queryKey: ['listings'],
-    queryFn: getListings,
+  } = useQuery({
+    queryKey: ['listings', page],
+    queryFn: () => getListings({ page }),
   });
   const navigate = useNavigate();
 
@@ -21,10 +24,12 @@ export default function HomePage() {
     <div className="p-4 space-y-4">
       <h1 className="text-2xl font-bold">Annonces récentes</h1>
 
-      {listings && listings.length === 0 && <p>Aucune annonce disponible.</p>}
+      {listings.data && listings.data.length === 0 && (
+        <p>Aucune annonce disponible.</p>
+      )}
 
       <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {listings?.map((listing) => (
+        {listings?.data.map((listing: Listing) => (
           <li
             key={listing.id}
             className="border rounded-lg p-4 shadow"
@@ -39,6 +44,13 @@ export default function HomePage() {
           </li>
         ))}
       </ul>
+      {listings?.meta && (
+        <PaginationControls
+          currentPage={listings.meta.currentPage}
+          lastPage={listings.meta.lastPage}
+          onPageChange={setPage}
+        />
+      )}
     </div>
   );
 }
