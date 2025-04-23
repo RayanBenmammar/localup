@@ -11,7 +11,12 @@ export const listingSchema = z.object({
   price: z
     .number()
     .positive({ message: 'Le prix doit être un nombre positif' }),
-  category: z.nativeEnum(ListingCategory),
+  category: z.enum(
+    Object.values(ListingCategory).map((cat) => cat.en) as [
+      string,
+      ...string[],
+    ],
+  ),
   id: z.number().optional(),
 });
 

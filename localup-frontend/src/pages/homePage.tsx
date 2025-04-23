@@ -4,11 +4,13 @@ import { Listing } from '@/types/listings.ts';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useState } from 'react';
 import { PaginationControls } from '@/components/ui/paginationControls';
+import { ListingCategory } from '@/types/listingCategory.ts';
 
 export default function HomePage() {
   const [page, setPage] = useState(1);
   const [params] = useSearchParams();
   const search = params.get('search') || '';
+  const category = params.get('category') || '';
   const navigate = useNavigate();
 
   const {
@@ -16,13 +18,13 @@ export default function HomePage() {
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ['listings', { page, search }],
-    queryFn: () => getListings({ page, search }),
+    queryKey: ['listings', { page, search, category }],
+    queryFn: () => getListings({ page, search, category }),
   });
 
   if (isLoading) return <div>Chargement...</div>;
   if (isError) return <div>Une erreur est survenue</div>;
-  if (listings.data && listings.data.length === 0)
+  if ((listings.data && listings.data.length === 0) || !listings.data)
     return (
       <div className="p-4 space-y-4">
         <p>Aucune annonce disponible.</p>
@@ -42,7 +44,13 @@ export default function HomePage() {
           >
             <h2 className="text-xl font-semibold">{listing.title}</h2>
             <p className="text-gray-600">{listing.description}</p>
-            <span className="text-sm text-blue-500">{listing.category}</span>
+            <span className="text-sm text-blue-500">
+              {
+                Object.values(ListingCategory).find(
+                  (cat) => cat.en === listing.category,
+                )?.fr
+              }
+            </span>
             <p className="text-sm text-gray-500 mt-2">
               Par {listing.user.name}
             </p>

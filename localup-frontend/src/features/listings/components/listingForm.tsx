@@ -168,11 +168,13 @@ export function ListingForm({ className, data, ...props }: ListingFormProps) {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {Object.values(ListingCategory).map((category) => (
-                            <SelectItem key={category} value={category}>
-                              {category}
-                            </SelectItem>
-                          ))}
+                          {Object.entries(ListingCategory).map(
+                            ([key, value]) => (
+                              <SelectItem key={key} value={value.en}>
+                                {value.fr}
+                              </SelectItem>
+                            ),
+                          )}
                         </SelectContent>
                       </Select>
                       <FormMessage />

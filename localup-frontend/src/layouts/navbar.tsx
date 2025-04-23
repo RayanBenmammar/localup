@@ -7,10 +7,11 @@ import { logoutUser } from '@/features/auth/api.ts';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Search } from 'lucide-react';
+import { ListingCategory } from '@/types/listingCategory.ts';
 
 export function Navbar() {
   const [inputValue, setInputValue] = useState('');
-  const [params, setParams] = useSearchParams();
+  const [params] = useSearchParams();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -30,13 +31,27 @@ export function Navbar() {
   };
 
   const handleSearch = () => {
-    params.set('search', inputValue);
-    params.set('page', '1');
-    setParams(params);
+    const newParams = new URLSearchParams(params);
+    newParams.set('search', inputValue);
+    newParams.set('page', '1');
+    navigate({
+      pathname: '/',
+      search: newParams.toString(),
+    });
+  };
+
+  const handleCategory = (category: string) => {
+    const newParams = new URLSearchParams(params);
+    newParams.set('category', category);
+    newParams.set('page', '1');
+    navigate({
+      pathname: '/',
+      search: newParams.toString(),
+    });
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full shadow-md p-4 bg-background">
+    <header className="sticky top-0 z-50 w-full shadow-md p-4 pb-0 bg-background">
       <div className="flex justify-between items-center">
         <Link to="/" className="text-2xl font-bold text-blue-600">
           LocalUp
@@ -80,6 +95,31 @@ export function Navbar() {
           )}
           <ModeToggle />
         </div>
+      </div>
+      <div className="w-full pt-4">
+        <nav>
+          <ul className="inline-flex gap-4">
+            {Object.entries(ListingCategory).map(
+              ([key, value], index, array) => (
+                <li key={key} className="flex items-center">
+                  <Button
+                    variant="link"
+                    className="hover:cursor-pointer"
+                    onClick={() => handleCategory(value.en)}
+                  >
+                    {value.fr}
+                  </Button>
+                  {index < array.length - 1 && (
+                    <div
+                      aria-hidden="true"
+                      className="relative flex-1 before:absolute before:content-['·'] before:font-bold before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:select-none before:pointer-events-none"
+                    ></div>
+                  )}
+                </li>
+              ),
+            )}
+          </ul>
+        </nav>
       </div>
     </header>
   );
